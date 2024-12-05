@@ -1,28 +1,275 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="et">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=v, initial-scale=1.0">
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parimad söögi pakkumised</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<h1>Veebilehe Teema</h1>
-<p>sooduspakkumise otsija</p>
-<h2>domeeninimi</h2>
-<p>Valisin nimeks diilidtana- see on vaba </p>
-<h3>Majutus teenused </h3>
-<p>Veebimajutus hind . 10.07€ kuus, 150gb kettamahtu, Piiramatult e-posti aadresse , domeenide arv piiramatu,, eposti adresse piiramatult, andmeedastus maht pole öeldud
 
-Radicenter- Hind 8,49€+domeeni ostu hind kuus, 250gb kettaruum,piiramatult e poste, domeenid piiramatult,andmeedastus maht piiramatult
+<div class="container">
+    <div id="login-view" class="hidden">
+        <h2>Admin Sisselogimine</h2>
+        <input type="password" id="admin-password" placeholder="Sisesta parool">
+        <button class="btn" onclick="checkPassword()">Logi sisse</button>
+    </div>
 
--veebisait aitab leida parimaid pakkumisi et valida kõige odavam söögikoht
--noored kes ei taha ise süüa teha ega ka palju maksta
--reklaamide abil 
--wordpress või html
--töötaja või mina ise 
--kirjutada korrektne kood kõikide lisadega,lingid
+    <div id="user-view">
+        <h1>Parimad söögi pakkumised täna</h1>
+        <button class="btn admin-login-btn" onclick="showLoginView()">Admin</button>
+        <div id="offers-list-view"></div>
+    </div>
 
-</p>
-    
+    <div id="admin-view" class="hidden">
+        <h1>Admin Paneel</h1>
+        <button class="btn red" onclick="logout()">Logi välja</button>
+        
+        <h2>Lisa uus pakkumine</h2>
+        <div class="form-group">
+            <label>Pakkumise nimi:</label>
+            <input type="text" id="offer-name">
+            
+            <label>Pakkumise kirjeldus:</label>
+            <input type="text" id="offer-description">
+            
+            <label>Hind (€):</label>
+            <input type="text" id="offer-price">
+            
+            <label>Lisa pilt:</label>
+            <input type="file" id="offer-image" accept="image/*">
+            
+            <button class="btn" onclick="addOffer()">Lisa Pakkumine</button>
+        </div>
+
+        <h2>Olemasolevad pakkumised</h2>
+        <div id="admin-offers-list-view"></div>
+
+        <h2>Lisa või Eemalda külgreklaamid</h2>
+        <div id="left-ads-container">
+            <h3>Vasakpoolsed reklaamid</h3>
+            <input type="text" id="left-ad-text" placeholder="Vasakpoolse reklaami tekst">
+            <input type="file" id="left-ad-image" accept="image/*">
+            <button class="btn" onclick="addSingleAd('left')">Lisa vasakule</button>
+        </div>
+        
+        <div id="right-ads-container">
+            <h3>Parempoolsed reklaamid</h3>
+            <input type="text" id="right-ad-text" placeholder="Parempoolse reklaami tekst">
+            <input type="file" id="right-ad-image" accept="image/*">
+            <button class="btn" onclick="addSingleAd('right')">Lisa paremale</button>
+        </div>
+        
+        <button class="btn red" onclick="removeSideAds()">Eemalda Kõik Reklaamid</button>
+    </div>
+</div>
+
+<!-- Külgreklaamid -->
+<div id="left-ad" class="side-ad-container"></div>
+<div id="right-ad" class="side-ad-container"></div>
+
+<script>
+    // Password protection
+    function showLoginView() {
+        document.getElementById('user-view').classList.add('hidden');
+        document.getElementById('login-view').classList.remove('hidden');
+    }
+
+    function checkPassword() {
+        const password = document.getElementById('admin-password').value;
+        if (password === '123') {
+            document.getElementById('login-view').classList.add('hidden');
+            document.getElementById('admin-view').classList.remove('hidden');
+            displayOffersAdminView();
+            displaySideAds();
+        } else {
+            alert('Vale parool!');
+        }
+    }
+
+    function logout() {
+        document.getElementById('admin-view').classList.add('hidden');
+        document.getElementById('user-view').classList.remove('hidden');
+        document.getElementById('admin-password').value = '';
+        displaySideAds();
+    }
+
+    // Function to add new offer
+    function addOffer() {
+        const name = document.getElementById('offer-name').value;
+        const description = document.getElementById('offer-description').value;
+        const price = document.getElementById('offer-price').value;
+        const imageInput = document.getElementById('offer-image');
+
+        if (!name || !description || !price || !imageInput.files.length) {
+            alert('Täida kõik väljad!');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            let offers = JSON.parse(localStorage.getItem('offers') || '[]');
+            offers.push({
+                name: name,
+                description: description,
+                price: price,
+                image: e.target.result
+            });
+            localStorage.setItem('offers', JSON.stringify(offers));
+            
+            document.getElementById('offer-name').value = '';
+            document.getElementById('offer-description').value = '';
+            document.getElementById('offer-price').value = '';
+            document.getElementById('offer-image').value = '';
+            
+            displayOffersAdminView();
+            displayOffersUserView();
+        };
+        reader.readAsDataURL(imageInput.files[0]);
+    }
+
+    // REKLAAMIDE LISAMINE
+    function addSingleAd(side) {
+        const adText = document.getElementById(`${side}-ad-text`).value;
+        const adImageInput = document.getElementById(`${side}-ad-image`);
+
+        if (!adText || !adImageInput.files.length) {
+            alert('Täida kõik väljad!');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            // Loeme olemasolevad reklaamid
+            let currentAds = [];
+            try {
+                currentAds = JSON.parse(localStorage.getItem(`${side}Ads`)) || [];
+            } catch (error) {
+                currentAds = [];
+            }
+
+            // Lisame uue reklaami
+            currentAds.push({
+                text: adText,
+                image: e.target.result
+            });
+
+            // Salvestame kõik reklaamid
+            localStorage.setItem(`${side}Ads`, JSON.stringify(currentAds));
+            
+            // Puhastame väljad
+            document.getElementById(`${side}-ad-text`).value = '';
+            document.getElementById(`${side}-ad-image`).value = '';
+            
+            // Uuendame kuva
+            displaySideAds();
+            
+            // Debug
+            console.log(`${side} ads count:`, currentAds.length);
+        };
+        reader.readAsDataURL(adImageInput.files[0]);
+    }
+
+    // Display functions
+    function displayOffersUserView() {
+        const offersList = document.getElementById('offers-list-view');
+        offersList.innerHTML = '';
+        let offers = JSON.parse(localStorage.getItem('offers') || '[]');
+        
+        offers.forEach(offer => {
+            offersList.innerHTML += `
+                <div class="offer">
+                    <h2>${offer.name}</h2>
+                    <p>${offer.description}</p>
+                    <p class="price">${offer.price} €</p>
+                    <img src="${offer.image}" alt="${offer.name}">
+                </div>
+            `;
+        });
+    }
+
+    function displayOffersAdminView() {
+        const adminOffersList = document.getElementById('admin-offers-list-view');
+        adminOffersList.innerHTML = '';
+        let offers = JSON.parse(localStorage.getItem('offers') || '[]');
+        
+        offers.forEach((offer, index) => {
+            adminOffersList.innerHTML += `
+                <div class="offer">
+                    <h2>${offer.name}</h2>
+                    <p>${offer.description}</p>
+                    <p class="price">${offer.price} €</p>
+                    <img src="${offer.image}" alt="${offer.name}">
+                    <button class="btn red" onclick="removeOffer(${index})">Eemalda</button>
+                </div>
+            `;
+        });
+    }
+
+    // REKLAAMIDE KUVAMINE
+    function displaySideAds() {
+        ['left', 'right'].forEach(side => {
+            const container = document.getElementById(`${side}-ad`);
+            container.innerHTML = '';
+            
+            // Loeme reklaamid
+            let currentAds = [];
+            try {
+                currentAds = JSON.parse(localStorage.getItem(`${side}Ads`)) || [];
+            } catch (error) {
+                currentAds = [];
+            }
+            
+            // Kuvame kõik reklaamid
+            currentAds.forEach((ad, index) => {
+                const adDiv = document.createElement('div');
+                adDiv.className = 'side-ad';
+                adDiv.innerHTML = `
+                    <p>${ad.text}</p>
+                    <img src="${ad.image}" alt="Reklaam">
+                    ${isAdminView() ? `<button class="btn red" onclick="removeAd('${side}', ${index})">X</button>` : ''}
+                `;
+                container.appendChild(adDiv);
+            });
+            
+            // Debug
+            console.log(`${side} ads displayed:`, currentAds.length);
+        });
+    }
+
+    // Remove functions
+    function removeOffer(index) {
+        let offers = JSON.parse(localStorage.getItem('offers') || '[]');
+        offers.splice(index, 1);
+        localStorage.setItem('offers', JSON.stringify(offers));
+        displayOffersAdminView();
+        displayOffersUserView();
+    }
+
+    function removeAd(side, index) {
+        let currentAds = [];
+        try {
+            currentAds = JSON.parse(localStorage.getItem(`${side}Ads`)) || [];
+        } catch (error) {
+            currentAds = [];
+        }
+        
+        currentAds.splice(index, 1);
+        localStorage.setItem(`${side}Ads`, JSON.stringify(currentAds));
+        displaySideAds();
+    }
+
+    function isAdminView() {
+        return !document.getElementById('admin-view').classList.contains('hidden');
+    }
+
+    // Initialize
+    window.onload = function() {
+        displayOffersUserView();
+        displayOffersAdminView();
+        displaySideAds();
+    }
+</script>
+
 </body>
 </html>
