@@ -1,197 +1,401 @@
-* {
-    box-sizing: border-box;
+:root {
+    --primary-color: #6200ea;    /* Sügav lilla */
+    --primary-light: #9d46ff;    /* Heledam lilla */
+    --secondary-color: #1a237e;  /* Tumesinine */
+    --accent-color: #f50057;     /* Ergas roosa */
+    --accent-light: #ff4081;     /* Heledam roosa */
+    --background-color: #fafafa; /* Hele taust */
+    --text-color: #212121;       /* Tume tekst */
+    --success-color: #00bfa5;    /* Türkiis */
+    --gradient-primary: linear-gradient(135deg, var(--primary-color), var(--primary-light));
+    --gradient-accent: linear-gradient(135deg, var(--accent-color), var(--accent-light));
+    --card-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    --hover-shadow: 0 15px 30px rgba(0,0,0,0.15);
 }
+
 body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background: linear-gradient(135deg, #d1e8ff, #d7f7f6);
+    background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
+    min-height: 100vh;
     margin: 0;
     padding: 0;
-    line-height: 1.6;
-    color: #2d3748;
+    position: relative;
 }
+
+/* Konteiner keskele */
 .container {
+    width: 50%;
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
     position: relative;
     z-index: 1;
 }
-h1, h2, h3 {
-    color: #3b82f6;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
-}
-.offer {
-    padding: 24px;
-    border-radius: 12px;
-    background: linear-gradient(145deg, #ffffff, #f0f4f8);
-    border: 1px solid rgba(59, 130, 246, 0.1);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
-    margin: 24px 0;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    animation: fadeIn 0.3s ease-out;
-}
-.offer:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 3px 15px rgba(59, 130, 246, 0.15);
-}
+
+/* Külgreklaamide konteinerid */
 .side-ad-container {
     position: fixed;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 200px;
+    width: 250px;
     z-index: 0;
-}
-#left-ad {
-    left: 20px;
-}
-#right-ad {
-    right: 20px;
-}
-.side-ad {
-    background: white;
-    padding: 15px;
-    margin: 10px 0;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-.side-ad:hover {
-    transform: scale(1.02);
-}
-.side-ad img {
-    max-width: 100%;
-    height: auto;
-}
-.hidden {
-    display: none;
-}
-.btn {
-    display: inline-block;
-    padding: 12px 24px;
-    margin: 12px 0;
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
-    color: white;
-    border: none;
-    border-radius: 12px;
-    cursor: pointer;
-    font-weight: 500;
-    transition: all 0.2s ease;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-}
-.btn:hover {
-    background: linear-gradient(135deg, #2563eb, #1d4ed8);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-}
-.btn.red {
-    background: linear-gradient(135deg, #ef4444, #dc2626);
-}
-.btn.red:hover {
-    background: linear-gradient(135deg, #dc2626, #b91c1c);
-}
-.btn.small {
-    padding: 2px 6px;
-    font-size: 12px;
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    border-radius: 6px;
-}
-.price {
-    color: #059669;
-    font-weight: bold;
-    font-size: 1.1em;
-}
-.date {
-    color: #6366f1;
-    font-style: italic;
-}
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-.form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    margin: 20px 0;
-}
-.form-group input {
-    padding: 8px;
-    border: 1px solid #93c5fd;
-    border-radius: 6px;
-}
-.form-group label {
-    font-weight: 500;
-    color: #3b82f6;
-}
-#login-view {
-    text-align: center;
+    top: 20px;
+    bottom: 20px;
+    overflow-y: auto;
     padding: 20px;
-}
-#login-view input {
-    padding: 8px;
-    border: 1px solid #93c5fd;
-    border-radius: 6px;
-    margin: 10px 0;
-}
-.btn.delete-offer {
-    padding: 8px 16px;
-    margin-top: 10px;
-    font-size: 14px;
-    width: auto;
-    display: block;
-}
-.admin-login-btn {
-    position: fixed;
-    top: 10px;
-    right: 20px;
-    background: transparent;
-    color: #3b82f6;
-    border: 1px solid #3b82f6;
-    padding: 8px 16px;
-    font-size: 14px;
-    opacity: 0.7;
-    z-index: 1100;
-}
-.admin-login-btn:hover {
-    background: rgba(59, 130, 246, 0.1);
-    transform: none;
-    box-shadow: none;
-}
-.remove-ad-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    padding: 4px 8px;
-    font-size: 12px;
-}
-.offer img {
-    max-width: 200px;
-    max-height: 200px;
-    width: auto;
-    height: auto;
-    display: block;
-    margin: 10px 0;
+    max-height: calc(100vh - 40px);
+    scrollbar-width: thin;  /* Firefox jaoks */
+    scrollbar-color: rgba(0,0,0,0.2) transparent;  /* Firefox jaoks */
 }
 
-/* Meedia päring väiksemate ekraanide jaoks */
-@media (max-width: 1400px) {
+/* Webkit (Chrome, Safari, Edge) kerimisriba stiilid */
+.side-ad-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.side-ad-container::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.side-ad-container::-webkit-scrollbar-thumb {
+    background-color: rgba(0,0,0,0.2);
+    border-radius: 3px;
+}
+
+#left-ad {
+    left: max(20px, calc(25% - 280px));
+    direction: rtl;  /* Liigutab kerimisriba vasakule */
+}
+
+#left-ad > * {
+    direction: ltr;  /* Taastab sisu normaalse suuna */
+}
+
+#right-ad {
+    right: max(20px, calc(25% - 280px));
+}
+
+/* Responsive disain */
+@media (max-width: 1600px) {
+    .container {
+        width: 60%;
+    }
+    
     .side-ad-container {
-        width: 150px;
+        width: 200px;
     }
     
     #left-ad {
-        left: 10px;
+        left: 20px;
     }
     
     #right-ad {
-        right: 10px;
+        right: 20px;
     }
 }
 
-/* Väga väikeste ekraanide jaoks peidame külgreklaamid */
 @media (max-width: 1200px) {
+    .container {
+        width: 80%;
+    }
+    
     .side-ad-container {
         display: none;
     }
+}
+
+/* Pakkumiste stiilid */
+.offer {
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    margin: 35px 0;
+    box-shadow: var(--card-shadow);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(0,0,0,0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.offer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: var(--gradient-primary);
+}
+
+.offer:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: var(--hover-shadow);
+}
+
+.offer img {
+    width: 100%;
+    max-height: 300px;
+    object-fit: contain;
+    border-radius: 8px;
+    margin: 15px 0;
+    background-color: var(--background-color);
+    padding: 10px;
+    transition: all 0.3s ease;
+}
+
+.offer:hover img {
+    transform: scale(1.02);
+}
+
+.offer .price {
+    background: var(--gradient-accent);
+    color: white;
+    padding: 12px 25px;
+    border-radius: 30px;
+    display: inline-block;
+    font-size: 1.8em;
+    font-weight: bold;
+    margin: 15px 0;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(245,0,87,0.2);
+}
+
+.offer:hover .price {
+    transform: scale(1.1) rotate(-2deg);
+    box-shadow: 0 6px 20px rgba(245,0,87,0.3);
+}
+
+/* Külgreklaamid */
+.side-ad {
+    background: white;
+    padding: 20px;
+    margin: 0 0 20px 0;
+    border-radius: 16px;
+    box-shadow: var(--card-shadow);
+    transition: all 0.4s ease;
+    border: 1px solid rgba(0,0,0,0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.side-ad:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--hover-shadow);
+}
+
+.side-ad img {
+    width: 100%;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.side-ad:hover img {
+    transform: scale(1.05);
+}
+
+/* Nupud */
+.btn {
+    background: var(--gradient-primary);
+    color: white;
+    border: none;
+    padding: 14px 28px;
+    border-radius: 8px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(30,55,153,0.2);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(120deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: all 0.6s ease;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(30,55,153,0.3);
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn.red {
+    background: var(--gradient-accent);
+    box-shadow: 0 4px 15px rgba(232,65,24,0.2);
+}
+
+.btn.red:hover {
+    box-shadow: 0 6px 20px rgba(232,65,24,0.3);
+}
+
+/* Pakkumiste stiilid */
+.offer {
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    margin: 35px 0;
+    box-shadow: var(--card-shadow);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(0,0,0,0.05);
+    position: relative;
+    overflow: hidden;
+}
+
+.offer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 5px;
+    background: var(--gradient-primary);
+}
+
+.offer:hover {
+    transform: translateY(-8px) scale(1.01);
+    box-shadow: var(--hover-shadow);
+}
+
+.offer h2 {
+    color: var(--primary-color);
+    font-size: 2em;
+    margin: 15px 0;
+    position: relative;
+    display: inline-block;
+}
+
+.offer h2::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: var(--gradient-primary);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+    transform-origin: left;
+}
+
+.offer:hover h2::after {
+    transform: scaleX(1);
+}
+
+/* Sisendi väljad */
+.form-group {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+input[type="text"],
+input[type="password"] {
+    width: 100%;
+    padding: 15px;
+    margin: 10px 0;
+    border: 2px solid #dcdde1;
+    border-radius: 8px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 4px rgba(30,55,153,0.1);
+    outline: none;
+}
+
+/* Pealkirjad */
+h1 {
+    color: var(--primary-color);
+    font-size: 3em;
+    text-align: center;
+    margin: 40px 0;
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-weight: 800;
+}
+
+h1::before {
+    content: '';
+    position: absolute;
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100px;
+    height: 5px;
+    background: var(--gradient-primary);
+    border-radius: 3px;
+}
+
+h2 {
+    color: var(--secondary-color);
+    margin: 20px 0;
+    font-size: 1.8em;
+}
+
+/* Peidetud elemendid */
+.hidden {
+    display: none;
+}
+
+/* Admin paneel */
+#admin-view {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+#admin-view h2 {
+    border-bottom: 3px solid var(--primary-color);
+    padding-bottom: 10px;
+}
+
+/* Animatsioonid */
+@keyframes fadeIn {
+    from { 
+        opacity: 0; 
+        transform: translateY(20px); 
+    }
+    to { 
+        opacity: 1; 
+        transform: translateY(0); 
+    }
+}
+
+.offer {
+    animation: fadeIn 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Admin nupp */
+.admin-login-btn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: transparent;
+    color: var(--secondary-color);
+    opacity: 0.5;
+    font-size: 0.9em;
+    padding: 8px 16px;
+    border: 1px solid var(--secondary-color);
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.admin-login-btn:hover {
+    opacity: 0.8;
+    background: rgba(47,54,64,0.05);
+    transform: translateY(-2px);
 }
