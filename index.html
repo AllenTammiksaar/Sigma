@@ -36,6 +36,9 @@
             <label>Hind (€):</label>
             <input type="text" id="offer-price">
             
+            <label>Kehtib kuni:</label>
+            <input type="date" id="offer-valid-until">
+            
             <label>Lisa pilt:</label>
             <input type="file" id="offer-image" accept="image/*">
             
@@ -99,9 +102,10 @@
         const name = document.getElementById('offer-name').value;
         const description = document.getElementById('offer-description').value;
         const price = document.getElementById('offer-price').value;
+        const validUntil = document.getElementById('offer-valid-until').value;
         const imageInput = document.getElementById('offer-image');
 
-        if (!name || !description || !price || !imageInput.files.length) {
+        if (!name || !description || !price || !validUntil || !imageInput.files.length) {
             alert('Täida kõik väljad!');
             return;
         }
@@ -113,6 +117,7 @@
                 name: name,
                 description: description,
                 price: price,
+                validUntil: validUntil,
                 image: e.target.result
             });
             localStorage.setItem('offers', JSON.stringify(offers));
@@ -120,6 +125,7 @@
             document.getElementById('offer-name').value = '';
             document.getElementById('offer-description').value = '';
             document.getElementById('offer-price').value = '';
+            document.getElementById('offer-valid-until').value = '';
             document.getElementById('offer-image').value = '';
             
             displayOffersAdminView();
@@ -182,6 +188,7 @@
                     <h2>${offer.name}</h2>
                     <p>${offer.description}</p>
                     <p class="price">${offer.price} €</p>
+                    <p class="valid-until">Kehtib kuni: ${new Date(offer.validUntil).toLocaleDateString('et-EE')}</p>
                     <img src="${offer.image}" alt="${offer.name}">
                 </div>
             `;
@@ -199,6 +206,7 @@
                     <h2>${offer.name}</h2>
                     <p>${offer.description}</p>
                     <p class="price">${offer.price} €</p>
+                    <p class="valid-until">Kehtib kuni: ${new Date(offer.validUntil).toLocaleDateString('et-EE')}</p>
                     <img src="${offer.image}" alt="${offer.name}">
                     <button class="btn red" onclick="removeOffer(${index})">Eemalda</button>
                 </div>
