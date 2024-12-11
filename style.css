@@ -14,7 +14,14 @@
 }
 
 body {
-    background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
+    background: 
+        linear-gradient(135deg, #fafafa 0%, #ffffff 100%),
+        repeating-linear-gradient(45deg, 
+            rgba(98, 0, 234, 0.03) 0px, 
+            rgba(98, 0, 234, 0.03) 2px,
+            transparent 2px, 
+            transparent 10px
+        );
     min-height: 100vh;
     margin: 0;
     padding: 0;
@@ -153,8 +160,11 @@ body {
     font-size: 1.8em;
     font-weight: bold;
     margin: 15px 0;
-    transition: all 0.3s ease;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
     box-shadow: 0 4px 15px rgba(245,0,87,0.2);
+    backface-visibility: hidden;
+    -webkit-font-smoothing: antialiased;
+    will-change: transform;
 }
 
 .offer:hover .price {
@@ -398,4 +408,97 @@ h2 {
     opacity: 0.8;
     background: rgba(47,54,64,0.05);
     transform: translateY(-2px);
+}
+
+/* Nuppude täiendused */
+.btn {
+    background-size: 200% auto;
+    background-position: left center;
+    transition: all 0.3s ease;
+}
+
+.btn:hover {
+    background-position: right center;
+}
+
+/* Pealkirjade täiendused */
+h1::after {
+    content: '';
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50px;
+    height: 5px;
+    background: var(--accent-color);
+    border-radius: 3px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: translateX(-50%) scale(1); opacity: 1; }
+    50% { transform: translateX(-50%) scale(1.5); opacity: 0.5; }
+    100% { transform: translateX(-50%) scale(1); opacity: 1; }
+}
+
+/* Hover efektid piltidele */
+.offer img {
+    position: relative;
+}
+
+.offer img::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, 
+        rgba(98, 0, 234, 0.1),
+        rgba(245, 0, 87, 0.1));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.offer:hover img::after {
+    opacity: 1;
+}
+
+/* Kehtivusaja stiilid */
+.validity-date {
+    background: var(--secondary-color);
+    color: white;
+    padding: 8px 16px;
+    border-radius: 20px;
+    display: inline-flex;
+    align-items: center;
+    font-size: 0.9em;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+}
+
+.validity-date::before {
+    content: '⏳';
+    margin-right: 8px;
+    font-size: 1.1em;
+}
+
+.validity-date.expires-soon {
+    background: var(--accent-color);
+    animation: pulse-warning 2s infinite;
+}
+
+@keyframes pulse-warning {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+/* Kohandame pakkumise konteineri, et mahutada kehtivusaega */
+.offer {
+    position: relative;
+    padding-top: 40px;
 }
